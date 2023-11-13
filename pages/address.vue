@@ -44,7 +44,7 @@
 import MainLayout from '~/layouts/MainLayout.vue';
 import { useUserStore } from '~/stores/user';
 const userStore = useUserStore()
-// const user = useSupabaseUser()
+const user = useSupabaseUser()
 
 let contactName = ref(null)
 let address = ref(null)
@@ -58,8 +58,7 @@ let isWorking = ref(false)
 let error = ref(null)
 
 watchEffect(async () => {
-    currentAddress.value = ""
-    // await useFetch(`/api/prisma/get-address-by-user/${user.value.id}`)
+    currentAddress.value = await useFetch(`/api/prisma/get-address-by-user/${user.value.id}`)
 
     if (currentAddress.value.data) {
         contactName.value = currentAddress.value.data.name
@@ -114,12 +113,12 @@ const submit = async () => {
         await useFetch(`/api/prisma/update-address/${currentAddress.value.data.id}`, {
             method: 'PATCH',
             body: {
-                // userId: user.value.id,
-                // name: contactName.value,
-                // address: address.value,
-                // zipCode: zipCode.value,
-                // city: city.value,
-                // country: country.value,
+                userId: user.value.id,
+                name: contactName.value,
+                address: address.value,
+                zipCode: zipCode.value,
+                city: city.value,
+                country: country.value,
             }
         })
 
@@ -131,12 +130,12 @@ const submit = async () => {
     await useFetch(`/api/prisma/add-address/`, {
         method: 'POST',
         body: {
-            // userId: user.value.id,
-            // name: contactName.value,
-            // address: address.value,
-            // zipCode: zipCode.value,
-            // city: city.value,
-            // country: country.value,
+            userId: user.value.id,
+            name: contactName.value,
+            address: address.value,
+            zipCode: zipCode.value,
+            city: city.value,
+            country: country.value,
         }
     })
 

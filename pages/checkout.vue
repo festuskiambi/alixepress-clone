@@ -117,7 +117,7 @@ let clientSecret = null
 let currentAddress = ref(null)
 let isProcessing = ref(false)
 
-onMounted(async () => {
+onBeforeMount(async () => {
     if (userStore.checkout.length < 1) {
         return navigateTo('/shoppingcart')
     }
@@ -128,6 +128,15 @@ onMounted(async () => {
         setTimeout(() => userStore.isLoading = false, 200)
     }
 })
+
+onMounted(async () => {
+    isProcessing.value = true
+
+    userStore.checkout.forEach(item => {
+        total.value += item.price
+    })
+})
+
 
 watchEffect(() => {
     if (route.fullPath == '/checkout' && !user.value) {
